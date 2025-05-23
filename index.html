@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Video Loop</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background-color: black;
+        }
+        #video-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+        #video-player {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            min-width: 100%;
+            min-height: 100%;
+            width: auto;
+            height: auto;
+        }
+    </style>
+</head>
+<body>
+    <div id="video-container">
+        <video id="video-player" autoplay muted loop>
+            <!-- Replace with your video file -->
+            <source src="Foundfootage.mp4" type="video/mp4">
+            Your browser does not support HTML5 video.
+        </video>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const video = document.getElementById('video-player');
+            
+            // Try to enter fullscreen automatically (may not work in all browsers due to restrictions)
+            function attemptFullscreen() {
+                if (video.requestFullscreen) {
+                    video.requestFullscreen().catch(err => {
+                        console.log('Fullscreen error:', err);
+                    });
+                } else if (video.webkitRequestFullscreen) {
+                    video.webkitRequestFullscreen();
+                } else if (video.msRequestFullscreen) {
+                    video.msRequestFullscreen();
+                }
+            }
+            
+            // Mute is required for autoplay in most browsers
+            video.muted = true;
+            
+            // Attempt to play and enter fullscreen when user interacts with page
+            document.addEventListener('click', function() {
+                video.play();
+                attemptFullscreen();
+            });
+            
+            // Try to start automatically (may not work without user interaction)
+            video.play().then(() => {
+                attemptFullscreen();
+            }).catch(error => {
+                console.log('Autoplay prevented:', error);
+            });
+        });
+    </script>
+</body>
+</html>
